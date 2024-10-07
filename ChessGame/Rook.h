@@ -9,4 +9,6 @@ public:
 	Rook() { };
 	~Rook() { };
 
+	bool IsMoveValid(int pos) override;
+	bool Move(int pos) override;
 };

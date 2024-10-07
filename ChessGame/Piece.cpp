@@ -29,3 +29,13 @@ bool Piece::Move(int pos)
 
 	return true;
 }
+
+bool Piece::IsPawn() const
+{
+	return m_inGameChar == 'P';
+}
+
+bool Piece::IsRook() const
+{
+	return m_inGameChar == 'R';
+}

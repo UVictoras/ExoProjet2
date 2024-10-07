@@ -8,4 +8,7 @@ public:
 
 	Bishop() { };
 	~Bishop() { };
+
+	bool IsMoveValid(int pos) override;
+	bool Move(int pos) override;
 };
