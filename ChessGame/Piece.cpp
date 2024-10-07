@@ -39,3 +39,8 @@ bool Piece::IsRook() const
 {
 	return m_inGameChar == 'R';
 }
+
+std::vector<int> Piece::GetPossibleMoves()
+{
+	return std::vector<int>();
+}

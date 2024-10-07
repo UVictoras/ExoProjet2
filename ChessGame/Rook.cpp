@@ -54,3 +54,36 @@ bool Rook::Move(int pos)
 
     return true;
 }
+
+std::vector<int> Rook::GetPossibleMoves()
+{
+    std::vector<int> moves;
+    AddStraightLineMoves(moves);
+    return moves;
+}
+
+void Rook::AddStraightLineMoves(std::vector<int>& moves)
+{
+    const int directions[4] = { -8, 8, -1, 1 };
+
+    for (int dir : directions)
+    {
+        int newPos = m_pos + dir;
+        while (newPos >= 0 && newPos < 64 && IsMoveValid(newPos))
+        {
+            if (board.m_cases[newPos] == nullptr)
+            {
+                moves.push_back(newPos);
+            }
+            else
+            {
+                if (board.m_cases[newPos]->m_color != m_color)
+                {
+                    moves.push_back(newPos);
+                }
+                break;
+            }
+            newPos += dir;
+        }
+    }
+}

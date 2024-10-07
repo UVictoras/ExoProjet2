@@ -21,4 +21,5 @@ public:
 	virtual bool Move(int pos);
 	bool IsPawn() const;
 	bool IsRook() const;
+	virtual std::vector<int> GetPossibleMoves();
 };

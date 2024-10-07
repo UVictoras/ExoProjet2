@@ -17,4 +17,11 @@ public:
 	void InitializeWhitePieces();
 
 	void PrintBoard();
+	bool IsMinorPiece(Piece* piece);
+	bool IsCheckmate(Color playerColor);
+	bool IsStalemate(Color playerColor);
+	bool IsInsufficientMaterial();
+	bool operator==(const Board& other) const;
+	bool IsThreefoldRepetition();
+	bool IsFiftyMoveRule();
 };

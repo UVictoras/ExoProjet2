@@ -34,3 +34,30 @@ bool Knight::Move(int pos)
 
     return true;
 }
+
+std::vector<int> Knight::GetPossibleMoves()
+{
+    std::vector<int> moves;
+    const int knightOffsets[8] = { -17, -15, -10, -6, 6, 10, 15, 17 };
+
+    for (int offset : knightOffsets)
+    {
+        int newPos = m_pos + offset;
+        if (newPos >= 0 && newPos < 64 && IsValidKnightMove(newPos))
+        {
+            if (board.m_cases[newPos] == nullptr || board.m_cases[newPos]->m_color != m_color)
+            {
+                moves.push_back(newPos);
+            }
+        }
+    }
+
+    return moves;
+}
+
+bool Knight::IsValidKnightMove(int end)
+{
+    int rowDiff = abs((m_pos / 8) - (end / 8));
+    int colDiff = abs((m_pos % 8) - (end % 8));
+    return (rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2);
+}

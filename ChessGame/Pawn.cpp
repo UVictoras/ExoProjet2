@@ -55,3 +55,42 @@ bool Pawn::Move(int pos)
 
     return true;
 }
+
+std::vector<int> Pawn::GetPossibleMoves()
+{
+    std::vector<int> moves;
+    int direction = (m_color == White) ? -8 : 8;
+    int forwardPos = m_pos + direction;
+
+    if (board.m_cases[forwardPos] == nullptr)
+    {
+        moves.push_back(forwardPos);
+
+        if ((m_color == White && m_pos >= 48 && m_pos <= 55) ||
+            (m_color == Black && m_pos >= 8 && m_pos <= 15))
+        {
+            int doubleForwardPos = m_pos + (direction * 2);
+            if (board.m_cases[doubleForwardPos] == nullptr)
+            {
+                moves.push_back(doubleForwardPos);
+            }
+        }
+    }
+
+    int captureLeft = m_pos + direction - 1;
+    int captureRight = m_pos + direction + 1;
+
+    if (captureLeft >= 0 && captureLeft < 64 && (m_pos % 8 != 0) &&
+        board.m_cases[captureLeft] != nullptr && board.m_cases[captureLeft]->m_color != m_color)
+    {
+        moves.push_back(captureLeft);
+    }
+
+    if (captureRight >= 0 && captureRight < 64 && ((m_pos + 1) % 8 != 0) &&
+        board.m_cases[captureRight] != nullptr && board.m_cases[captureRight]->m_color != m_color)
+    {
+        moves.push_back(captureRight);
+    }
+
+    return moves;
+}

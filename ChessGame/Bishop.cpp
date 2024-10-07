@@ -48,3 +48,35 @@ bool Bishop::Move(int pos)
 
     return true;
 }
+
+std::vector<int> Bishop::GetPossibleMoves()
+{
+    std::vector<int> moves;
+    AddDiagonalMoves(moves);
+    return moves;
+}
+
+void Bishop::AddDiagonalMoves(std::vector<int>& moves)
+{
+    const int directions[4] = { -9, -7, 7, 9 };
+    for (int dir : directions)
+    {
+        int newPos = m_pos + dir;
+        while (newPos >= 0 && newPos < 64 && IsMoveValid(newPos)) 
+        {
+            if (board.m_cases[newPos] == nullptr)
+            {
+                moves.push_back(newPos);
+            }
+            else
+            {
+                if (board.m_cases[newPos]->m_color != m_color)
+                {
+                    moves.push_back(newPos);
+                }
+                break;
+            }
+            newPos += dir;
+        }
+    }
+}

@@ -1,38 +1,129 @@
 #include "pch.h"
 #include <iostream>
+#include <vector>
+#include <string>
 
-Board board; 
+Board board;
+
+std::vector<Board> gameHistory;  
+int halfMoveClock = 0;  
+
+int ConvertChessNotationToIndex(const std::string& position)
+{
+    if (position.length() != 2)
+        return -1;
+
+    char column = position[0];
+    char row = position[1];
+
+    if (column < 'A' || column > 'H' || row < '1' || row > '8')
+        return -1;
+
+    int colIndex = column - 'A';
+    int rowIndex = row - '1';
+    return rowIndex * 8 + colIndex;
+}
 
 int main()
 {
     board.InitializeBoard();
-    board.PrintBoard();
+    Color currentPlayer = White;
 
-    reinterpret_cast<Pawn*>(board.m_cases[48])->Move(32);
-    board.PrintBoard();
-    reinterpret_cast<Pawn*>(board.m_cases[32])->Move(16);
-    board.PrintBoard();
+    std::string startPosStr, targetPosStr; 
+    int startPos;
+    int targetPos; 
 
-    reinterpret_cast<Pawn*>(board.m_cases[51])->Move(43);
-    board.PrintBoard();
+    Piece* piece;
 
-    reinterpret_cast<Knight*>(board.m_cases[62])->Move(45); 
-    board.PrintBoard();
+    while (true)
+    {
+        board.PrintBoard();
+        std::cout << (currentPlayer == White ? "White's turn" : "Black's turn") << std::endl;
 
-    reinterpret_cast<Bishop*>(board.m_cases[58])->Move(23);  
-    board.PrintBoard();
-    reinterpret_cast<Bishop*>(board.m_cases[23])->Move(14); 
-    board.PrintBoard();
+        startPosStr, targetPosStr;
+        std::cout << "Enter move (startPos targetPos, e.g., A2 A3): ";
+        std::cin >> startPosStr >> targetPosStr;
+        std::cout << std::endl;
 
-    reinterpret_cast<Pawn*>(board.m_cases[52])->Move(44);
-    board.PrintBoard();
+        startPos = ConvertChessNotationToIndex(startPosStr);
+        targetPos = ConvertChessNotationToIndex(targetPosStr);
 
-    reinterpret_cast<Bishop*>(board.m_cases[61])->Move(52);
-    board.PrintBoard();
-    
-    reinterpret_cast<Rook*>(board.m_cases[56])->Move(40);
-    board.PrintBoard();
+        if (startPos == -1 || targetPos == -1)
+        {
+            std::cout << "Invalid input. Try again." << std::endl;
+            continue;
+        }
 
-    reinterpret_cast<King*>(board.m_cases[60])->Move(62);
-    board.PrintBoard();
+        piece = board.m_cases[startPos];
+        if (piece == nullptr || piece->m_color != currentPlayer)
+        {
+            std::cout << "Invalid move. Try again." << std::endl;
+            continue;
+        }
+
+        if (piece->IsMoveValid(targetPos))
+        {
+            if (Pawn* pawn = dynamic_cast<Pawn*>(piece))
+            {
+                pawn->Move(targetPos);
+            }
+            else if (Knight* knight = dynamic_cast<Knight*>(piece))
+            {
+                knight->Move(targetPos);
+            }
+            else if (Bishop* bishop = dynamic_cast<Bishop*>(piece))
+            {
+                bishop->Move(targetPos);
+            }
+            else if (Rook* rook = dynamic_cast<Rook*>(piece))
+            {
+                rook->Move(targetPos);
+            }
+            else if (Queen* queen = dynamic_cast<Queen*>(piece))
+            {
+                queen->Move(targetPos);
+            }
+            else if (King* king = dynamic_cast<King*>(piece))
+            {
+                king->Move(targetPos);
+            }
+
+            currentPlayer = (currentPlayer == White) ? Black : White;
+            halfMoveClock++;  
+
+            gameHistory.push_back(board);
+        }
+        else
+        {
+            std::cout << "Invalid move. Try again." << std::endl;
+        }
+
+        if (board.IsCheckmate(currentPlayer))
+        {
+            std::cout << (currentPlayer == White ? "Black wins by checkmate!" : "White wins by checkmate!") << std::endl;
+            break;
+        }
+        else if (board.IsStalemate(currentPlayer))
+        {
+            std::cout << "The game is a draw by stalemate!" << std::endl;
+            break;
+        }
+        else if (board.IsInsufficientMaterial())
+        {
+            std::cout << "The game is a draw by insufficient material!" << std::endl;
+            break;
+        }
+        else if (board.IsThreefoldRepetition())
+        {
+            std::cout << "The game is a draw by threefold repetition!" << std::endl;
+            break;
+        }
+        else if (board.IsFiftyMoveRule())
+        {
+            std::cout << "The game is a draw by the 50-move rule!" << std::endl;
+            break;
+        }
+    }
+
+    return 0;
 }

@@ -97,3 +97,23 @@ bool King::IsUnderAttack(int row, int col)
     }
     return false;
 }
+
+std::vector<int> King::GetPossibleMoves()
+{
+    std::vector<int> moves;
+    const int kingOffsets[8] = { -9, -8, -7, -1, 1, 7, 8, 9 };
+
+    for (int offset : kingOffsets)
+    {
+        int newPos = m_pos + offset;
+        if (newPos >= 0 && newPos < 64 && IsMoveValid(newPos))
+        {
+            if (board.m_cases[newPos] == nullptr || board.m_cases[newPos]->m_color != m_color)
+            {
+                moves.push_back(newPos);
+            }
+        }
+    }
+
+    return moves;
+}

@@ -71,3 +71,73 @@ bool Queen::Move(int pos)
 
     return true;
 }
+
+std::vector<int> Queen::GetPossibleMoves()
+{
+    std::vector<int> moves;
+    AddStraightLineMoves(moves);
+    AddDiagonalMoves(moves);
+    return moves;
+}
+
+void Queen::AddStraightLineMoves(std::vector<int>& moves)
+{
+    const int directions[4] = { -8, 8, -1, 1 };
+
+    for (int dir : directions)
+    {
+        int newPos = m_pos + dir;
+        while (newPos >= 0 && newPos < 64)
+        {
+            if (!IsMoveValid(newPos))
+            {
+                break;
+            }
+
+            if (board.m_cases[newPos] == nullptr)
+            {
+                moves.push_back(newPos);
+            }
+            else
+            {
+                if (board.m_cases[newPos]->m_color != m_color)
+                {
+                    moves.push_back(newPos);
+                }
+                break;
+            }
+            newPos += dir;
+        }
+    }
+}
+
+void Queen::AddDiagonalMoves(std::vector<int>& moves)
+{
+    const int directions[4] = { -9, -7, 7, 9 };
+
+    for (int dir : directions)
+    {
+        int newPos = m_pos + dir;
+        while (newPos >= 0 && newPos < 64)
+        {
+            if (!IsMoveValid(newPos))
+            {
+                break;
+            }
+
+            if (board.m_cases[newPos] == nullptr)
+            {
+                moves.push_back(newPos);
+            }
+            else
+            {
+                if (board.m_cases[newPos]->m_color != m_color)
+                {
+                    moves.push_back(newPos);
+                }
+                break;
+            }
+            newPos += dir;
+        }
+    }
+}

@@ -22,3 +22,5 @@ enum Color
 };
 
 extern Board board;
+extern std::vector<Board> gameHistory;  
+extern int halfMoveClock;  
