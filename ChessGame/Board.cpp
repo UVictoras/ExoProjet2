@@ -1,14 +1,14 @@
 ﻿#include "pch.h"
 #include "Board.h"
 
-void Board::InitializeBoard()
+void Board::InitializeBoard(char pieceToReplace)
 {
     std::fill(std::begin(m_cases), std::end(m_cases), nullptr);
-    InitializeBlackPieces();
-    InitializeWhitePieces();
+    InitializeBlackPieces(pieceToReplace);
+    InitializeWhitePieces(pieceToReplace);
 }
 
-void Board::InitializeBlackPieces()
+void Board::InitializeBlackPieces(char pieceToReplace)
 {
     for (int i = 0; i < 16; i++)
     {
@@ -16,19 +16,58 @@ void Board::InitializeBlackPieces()
         char inGameChar;
         int position = i;
 
-        if (i == 0 || i == 7) { inGameChar = 'R'; piece = new Rook(); }
-        else if (i == 1 || i == 6) { inGameChar = 'N'; piece = new Knight(); }
-        else if (i == 2 || i == 5) { inGameChar = 'B'; piece = new Bishop(); }
-        else if (i == 3) { inGameChar = 'Q'; piece = new Queen(); }
-        else if (i == 4) { inGameChar = 'K'; piece = new King(); }
-        else { inGameChar = 'P'; piece = new Pawn(); }
+        if (i == 0 || i == 7) 
+        { 
+            if (pieceToReplace == 'R')
+            {
+                inGameChar = 'P'; piece = new Pawn(); 
+            }
+            else
+            {
+                inGameChar = 'R'; piece = new Rook(); 
+            }
+        }
+        else if (i == 1 || i == 6) 
+        { 
+            if (pieceToReplace == 'N')
+            {
+                inGameChar = 'P'; piece = new Pawn();
+            }
+            else
+            {
+                inGameChar = 'N'; piece = new Knight();
+            }
+        }
+        else if (i == 2 || i == 5) 
+        { 
+            if (pieceToReplace == 'B')
+            {
+                inGameChar = 'P'; piece = new Pawn();
+            }
+            else
+            {
+                inGameChar = 'B'; piece = new Bishop();
+            }
+        }
+        else if (i == 3)
+        { 
+            inGameChar = 'Q'; piece = new Queen(); 
+        }
+        else if (i == 4) 
+        { 
+            inGameChar = 'K'; piece = new King(); 
+        }
+        else 
+        { 
+            inGameChar = 'P'; piece = new Pawn(); 
+        }
 
         piece->InitializePiece(position, inGameChar, Black);
         m_cases[position] = piece;
     }
 }
 
-void Board::InitializeWhitePieces()
+void Board::InitializeWhitePieces(char pieceToReplace)
 {
     Piece* piece = nullptr;
     char inGameChar;
@@ -38,54 +77,55 @@ void Board::InitializeWhitePieces()
     {
         position = i + 48;
 
-        if (i < 8) { inGameChar = 'P'; piece = new Pawn(); }
-        else if (i == 8 || i == 15) { inGameChar = 'R'; piece = new Rook(); }
-        else if (i == 9 || i == 14) { inGameChar = 'N'; piece = new Knight(); }
-        else if (i == 10 || i == 13) { inGameChar = 'B'; piece = new Bishop(); }
-        else if (i == 11) { inGameChar = 'Q'; piece = new Queen(); }
-        else { inGameChar = 'K'; piece = new King(); }
+        if (i < 8) 
+        { 
+            inGameChar = 'P'; piece = new Pawn(); 
+        }
+        else if (i == 8 || i == 15) 
+        {
+            if (pieceToReplace == 'R')
+            {
+                inGameChar = 'P'; piece = new Pawn();
+            }
+            else
+            {
+                inGameChar = 'R'; piece = new Rook();
+            }
+        }
+        else if (i == 9 || i == 14) 
+        { 
+            if (pieceToReplace == 'N')
+            {
+                inGameChar = 'P'; piece = new Pawn();
+            }
+            else
+            {
+                inGameChar = 'N'; piece = new Knight();
+            }
+        }
+        else if (i == 10 || i == 13) 
+        { 
+            if (pieceToReplace == 'B') 
+            {
+                inGameChar = 'P'; piece = new Pawn(); 
+            }
+            else
+            {
+                inGameChar = 'B'; piece = new Bishop(); 
+            }
+        }
+        else if (i == 11) 
+        { 
+            inGameChar = 'Q'; piece = new Queen(); 
+        }
+        else 
+        { 
+            inGameChar = 'K'; piece = new King(); 
+        }
 
         piece->InitializePiece(position, inGameChar, White);
         m_cases[position] = piece;
     }
-}
-
-void Board::PrintBoard()
-{
-    std::cout << "\33[37m    A   B   C   D   E   F   G   H\n";
-    std::cout << "\33[90m  +---+---+---+---+---+---+---+---+\n";
-
-    for (int i = 0; i < 64; i++)
-    {
-        bool isEvenRow = (i / 8) % 2 == 0;
-        bool isEvenCol = (i % 8) % 2 == 0;
-        bool isBeigeSquare = (isEvenRow && isEvenCol) || (!isEvenRow && !isEvenCol);
-
-        if (i % 8 == 0)
-        {
-            std::cout << "\33[37m" << i / 8 + 1 << " |";
-        }
-
-        std::cout << (isBeigeSquare ? "\33[48;2;139;0;0m" : "\33[40m");
-
-        if (m_cases[i] == nullptr)
-        {
-            std::cout << "   ";
-            std::cout << "\33[40m" << "\33[90m" << "|";
-        }
-        else
-        {
-            std::cout << (m_cases[i]->m_color == White ? "\33[37m" : "\33[96m")
-                << " " << m_cases[i]->m_inGameChar << " ";
-            std::cout << "\33[40m" << "\33[90m" << "|";
-        }
-
-        if ((i + 1) % 8 == 0)
-        {
-            std::cout << "\n\33[90m  +---+---+---+---+---+---+---+---+\n";
-        }
-    }
-    std::cout << "\33[37m\n";
 }
 
 bool Board::IsMinorPiece(Piece* piece)
@@ -100,14 +140,11 @@ bool Board::IsCheckmate(Color playerColor)
 
     for (int i = 0; i < 64; i++)
     {
-        if (m_cases[i] != nullptr && m_cases[i]->m_color == playerColor)
+        if (m_cases[i] != nullptr && m_cases[i]->m_color == playerColor && m_cases[i]->IsKing())
         {
-            king = dynamic_cast<King*>(m_cases[i]);
-            if (king != nullptr)
-            {
-                kingPos = i;
-                break;
-            }
+            king = reinterpret_cast<King*>(m_cases[i]);
+            kingPos = i;
+            break;
         }
     }
 
@@ -126,16 +163,18 @@ bool Board::IsCheckmate(Color playerColor)
             for (int targetPos : possibleMoves)
             {
                 Piece* capturedPiece = m_cases[targetPos];
-                piece->Move(targetPos);
+
+                m_cases[targetPos] = piece;
+                m_cases[i] = nullptr;
 
                 if (!king->IsUnderAttack(kingPos / 8, kingPos % 8))
                 {
-                    piece->Move(i); 
+                    m_cases[i] = piece;
                     m_cases[targetPos] = capturedPiece;
                     return false;
                 }
 
-                piece->Move(i);
+                m_cases[i] = piece;
                 m_cases[targetPos] = capturedPiece;
             }
         }
@@ -144,7 +183,6 @@ bool Board::IsCheckmate(Color playerColor)
     return true;
 }
 
-
 bool Board::IsStalemate(Color playerColor)
 {
     King* king = nullptr;
@@ -152,19 +190,16 @@ bool Board::IsStalemate(Color playerColor)
 
     for (int i = 0; i < 64; i++)
     {
-        if (m_cases[i] != nullptr && m_cases[i]->m_color == playerColor)
+        if (m_cases[i] != nullptr && m_cases[i]->m_color == playerColor && m_cases[i]->IsKing())
         {
-            king = dynamic_cast<King*>(m_cases[i]);
-            if (king != nullptr)
-            {
-                kingPos = i;
-                break;
-            }
+            king = reinterpret_cast<King*>(m_cases[i]);
+            kingPos = i;
+            break;
         }
     }
 
     if (king == nullptr)
-        return false; 
+        return false;
 
     if (king->IsUnderAttack(kingPos / 8, kingPos % 8))
         return false;
@@ -178,24 +213,25 @@ bool Board::IsStalemate(Color playerColor)
             for (int targetPos : possibleMoves)
             {
                 Piece* capturedPiece = m_cases[targetPos];
-                piece->Move(targetPos);
+
+                m_cases[targetPos] = piece;
+                m_cases[i] = nullptr;
 
                 if (!king->IsUnderAttack(kingPos / 8, kingPos % 8))
                 {
-                    piece->Move(i);
-                    m_cases[targetPos] = capturedPiece; 
+                    m_cases[i] = piece;
+                    m_cases[targetPos] = capturedPiece;
                     return false;
                 }
 
-                piece->Move(i);
+                m_cases[i] = piece;
                 m_cases[targetPos] = capturedPiece;
             }
         }
     }
 
-    return true; 
+    return true;
 }
-
 
 bool Board::IsInsufficientMaterial()
 {
@@ -271,5 +307,5 @@ bool Board::IsThreefoldRepetition()
 
 bool Board::IsFiftyMoveRule()
 {
-    return halfMoveClock >= 50;
+    return halfMoveClock >= MAX_TURN;
 }

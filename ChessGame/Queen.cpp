@@ -77,6 +77,7 @@ std::vector<int> Queen::GetPossibleMoves()
     std::vector<int> moves;
     AddStraightLineMoves(moves);
     AddDiagonalMoves(moves);
+    m_possiblesMoves = moves;
     return moves;
 }
 

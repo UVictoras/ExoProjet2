@@ -53,6 +53,7 @@ std::vector<int> Bishop::GetPossibleMoves()
 {
     std::vector<int> moves;
     AddDiagonalMoves(moves);
+    m_possiblesMoves = moves;
     return moves;
 }
 

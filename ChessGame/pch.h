@@ -14,6 +14,7 @@
 #include "King.h"
 #include "Queen.h"
 #include "Rook.h"
+#include "Graphics.h"
 
 enum Color
 {
@@ -23,4 +24,5 @@ enum Color
 
 extern Board board;
 extern std::vector<Board> gameHistory;  
-extern int halfMoveClock;  
+extern int halfMoveClock; 
+extern int MAX_TURN;

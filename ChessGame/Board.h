@@ -8,15 +8,15 @@ class Board
 {
 public:
 	Piece* m_cases[64];
+	int m_lastMove;
 
-	Board() { };
+	Board() : m_lastMove(0) { };
 	~Board() { };
 
-	void InitializeBoard();
-	void InitializeBlackPieces();
-	void InitializeWhitePieces();
+	void InitializeBoard(char pieceToReplace);
+	void InitializeBlackPieces(char pieceToReplace);
+	void InitializeWhitePieces(char pieceToReplace);
 
-	void PrintBoard();
 	bool IsMinorPiece(Piece* piece);
 	bool IsCheckmate(Color playerColor);
 	bool IsStalemate(Color playerColor);

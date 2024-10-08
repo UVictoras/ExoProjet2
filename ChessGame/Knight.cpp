@@ -52,6 +52,8 @@ std::vector<int> Knight::GetPossibleMoves()
         }
     }
 
+    m_possiblesMoves = moves;
+
     return moves;
 }
 

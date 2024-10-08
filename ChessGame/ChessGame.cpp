@@ -5,8 +5,14 @@
 
 Board board;
 
-std::vector<Board> gameHistory;  
-int halfMoveClock = 0;  
+std::vector<Board> gameHistory;
+int halfMoveClock = 0;
+
+#if defined(_DEMO)
+int MAX_TURN = 4;
+#else
+int MAX_TURN = 50;
+#endif
 
 int ConvertChessNotationToIndex(const std::string& position)
 {
@@ -26,26 +32,40 @@ int ConvertChessNotationToIndex(const std::string& position)
 
 int main()
 {
-    board.InitializeBoard();
+#if defined(_COMPLETE) || defined(_DEMO)
+    board.InitializeBoard(' ');
+#elif defined(_LIGHT)
+    srand(time(NULL));
+    char letters[3] = { 'R', 'N', 'B' };
+    int random = rand() % 3;
+    char pieceToReplace = letters[random];
+    board.InitializeBoard(pieceToReplace);
+#endif
     Color currentPlayer = White;
+    Graphics graphics;
 
-    std::string startPosStr, targetPosStr; 
+    std::string startPosStr, targetPosStr;
     int startPos;
-    int targetPos; 
+    int targetPos;
+    bool isValidMove = false;
 
     Piece* piece;
 
     while (true)
     {
-        board.PrintBoard();
+        graphics.DrawBoard();
         std::cout << (currentPlayer == White ? "White's turn" : "Black's turn") << std::endl;
 
-        startPosStr, targetPosStr;
-        std::cout << "Enter move (startPos targetPos, e.g., A2 A3): ";
-        std::cin >> startPosStr >> targetPosStr;
+        std::cout << "Enter move (startPos e.g., A7): ";
+        std::cin >> startPosStr;
         std::cout << std::endl;
 
         startPos = ConvertChessNotationToIndex(startPosStr);
+
+        graphics.DrawBoard(startPos);
+        std::cout << "Enter where you want to move : ";
+        std::cin >> targetPosStr;
+
         targetPos = ConvertChessNotationToIndex(targetPosStr);
 
         if (startPos == -1 || targetPos == -1)
@@ -61,35 +81,43 @@ int main()
             continue;
         }
 
-        if (piece->IsMoveValid(targetPos))
+        if (piece->m_inGameChar == 'P')
         {
-            if (Pawn* pawn = dynamic_cast<Pawn*>(piece))
-            {
-                pawn->Move(targetPos);
-            }
-            else if (Knight* knight = dynamic_cast<Knight*>(piece))
-            {
-                knight->Move(targetPos);
-            }
-            else if (Bishop* bishop = dynamic_cast<Bishop*>(piece))
-            {
-                bishop->Move(targetPos);
-            }
-            else if (Rook* rook = dynamic_cast<Rook*>(piece))
-            {
-                rook->Move(targetPos);
-            }
-            else if (Queen* queen = dynamic_cast<Queen*>(piece))
-            {
-                queen->Move(targetPos);
-            }
-            else if (King* king = dynamic_cast<King*>(piece))
-            {
-                king->Move(targetPos);
-            }
+            Pawn* pawn = dynamic_cast<Pawn*>(piece);
+            if (pawn->Move(targetPos)) isValidMove = true;
+        }
+        else if (piece->m_inGameChar == 'N')
+        {
+            Knight* knight = dynamic_cast<Knight*>(piece);
+            if (knight->Move(targetPos)) isValidMove = true;
+        }
+        else if (piece->m_inGameChar == 'B')
+        {
+            Bishop* bishop = dynamic_cast<Bishop*>(piece);
+            if (bishop->Move(targetPos)) isValidMove = true;
+        }
+        else if (piece->m_inGameChar == 'R')
+        {
+            Rook* rook = dynamic_cast<Rook*>(piece);
+            if (rook->Move(targetPos)) isValidMove = true;
+        }
+        else if (piece->m_inGameChar == 'Q')
+        {
+            Queen* queen = dynamic_cast<Queen*>(piece);
+            if (queen->Move(targetPos)) isValidMove = true;
+        }
+        else if (piece->m_inGameChar == 'K')
+        {
+            King* king = dynamic_cast<King*>(piece);
+            if (king->Move(targetPos)) isValidMove = true;
+        }
+
+        if (isValidMove == true)
+        {
+            board.m_lastMove = targetPos;
 
             currentPlayer = (currentPlayer == White) ? Black : White;
-            halfMoveClock++;  
+            halfMoveClock++;
 
             gameHistory.push_back(board);
         }
@@ -123,6 +151,9 @@ int main()
             std::cout << "The game is a draw by the 50-move rule!" << std::endl;
             break;
         }
+
+        system("cls");
+        isValidMove = false;
     }
 
     return 0;

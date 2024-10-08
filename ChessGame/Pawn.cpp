@@ -6,27 +6,41 @@ bool Pawn::IsMoveValid(int pos)
     int diff = m_pos - pos;
     int direction = (m_color == White) ? 1 : -1;
 
-    if (diff != 8 * direction &&
-        diff != 7 * direction &&
-        diff != 9 * direction &&
-        !(diff == 16 * direction && !m_hasMoved))
-        return false;
+    if (diff == 8 * direction && board.m_cases[pos] == nullptr)
+    {
+        return true;
+    }
 
-    if ((diff == 8 * direction || (diff == 16 * direction && !m_hasMoved)) &&
-        board.m_cases[m_pos - 8 * direction] != nullptr)
-        return false;
-
-    if (diff == 16 * direction &&
-        (board.m_cases[m_pos - 8 * direction] != nullptr ||
-            board.m_cases[m_pos - 16 * direction] != nullptr))
-        return false;
+    if (diff == 16 * direction && !m_hasMoved &&
+        board.m_cases[m_pos - 8 * direction] == nullptr &&
+        board.m_cases[pos] == nullptr)
+    {
+        return true;
+    }
 
     if ((diff == 7 * direction || diff == 9 * direction) &&
-        (board.m_cases[m_pos - diff] == nullptr ||
-            board.m_cases[m_pos - diff]->m_color == m_color))
-        return false;
+        board.m_cases[pos] != nullptr &&
+        board.m_cases[pos]->m_color != m_color)
+    {
+        return true;
+    }
 
-    return true;
+    if ((diff == 7 * direction || diff == 9 * direction) &&
+        board.m_cases[pos] == nullptr)
+    {
+        int targetPos = m_pos - direction * 8;
+        if (board.m_lastMove == targetPos &&
+            board.m_cases[targetPos] != nullptr &&
+            board.m_cases[targetPos]->IsPawn() &&
+            board.m_cases[targetPos]->m_color != m_color &&
+            board.m_cases[targetPos]->m_hasMoved &&
+            abs(board.m_lastMove - m_pos) == 16)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool Pawn::Move(int pos)
@@ -36,15 +50,17 @@ bool Pawn::Move(int pos)
         return false;
     }
 
-    if (abs(m_pos - pos) == 7 || abs(m_pos - pos) == 9) 
+    if (abs(m_pos - pos) == 7 || abs(m_pos - pos) == 9)
     {
-        int targetPos = m_pos + ((m_color == White) ? -8 : 8);
-        if (board.m_cases[targetPos] != nullptr &&
-            board.m_cases[targetPos]->IsPawn() &&
-            board.m_cases[targetPos]->m_color != m_color &&
-            !board.m_cases[targetPos]->m_hasMoved)
+        if (board.m_cases[pos] == nullptr)
         {
-            board.m_cases[targetPos] = nullptr;
+            int targetPos = pos + ((m_color == White) ? 8 : -8);
+            if (board.m_cases[targetPos] != nullptr &&
+                board.m_cases[targetPos]->IsPawn() &&
+                board.m_cases[targetPos]->m_color != m_color)
+            {
+                board.m_cases[targetPos] = nullptr;
+            }
         }
     }
 
@@ -92,5 +108,6 @@ std::vector<int> Pawn::GetPossibleMoves()
         moves.push_back(captureRight);
     }
 
+    m_possiblesMoves = moves;
     return moves;
 }

@@ -9,6 +9,8 @@ public:
 
 	char m_inGameChar;
 
+	std::vector<int> m_possiblesMoves;
+
 	Color m_color;
 
 	bool m_hasMoved;
@@ -21,5 +23,6 @@ public:
 	virtual bool Move(int pos);
 	bool IsPawn() const;
 	bool IsRook() const;
+	bool IsKing() const;
 	virtual std::vector<int> GetPossibleMoves();
 };

@@ -40,7 +40,12 @@ bool Piece::IsRook() const
 	return m_inGameChar == 'R';
 }
 
+bool Piece::IsKing() const
+{
+	return m_inGameChar == 'K';
+}
+
 std::vector<int> Piece::GetPossibleMoves()
 {
-	return std::vector<int>();
+	return m_possiblesMoves;
 }

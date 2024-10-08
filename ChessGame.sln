@@ -7,20 +7,38 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessGame", "ChessGame\Ches
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Complete|x64 = Complete|x64
+		Complete|x86 = Complete|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
+		Demo|x64 = Demo|x64
+		Demo|x86 = Demo|x86
+		Light|x64 = Light|x64
+		Light|x86 = Light|x86
+		Log|x64 = Log|x64
+		Log|x86 = Log|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Complete|x64.ActiveCfg = Complete|x64
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Complete|x64.Build.0 = Complete|x64
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Complete|x86.ActiveCfg = Complete|Win32
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Complete|x86.Build.0 = Complete|Win32
 		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Debug|x64.ActiveCfg = Debug|x64
 		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Debug|x64.Build.0 = Debug|x64
 		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Debug|x86.ActiveCfg = Debug|Win32
 		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Debug|x86.Build.0 = Debug|Win32
-		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Release|x64.ActiveCfg = Release|x64
-		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Release|x64.Build.0 = Release|x64
-		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Release|x86.ActiveCfg = Release|Win32
-		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Release|x86.Build.0 = Release|Win32
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Demo|x64.ActiveCfg = Demo|x64
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Demo|x64.Build.0 = Demo|x64
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Demo|x86.ActiveCfg = Demo|Win32
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Demo|x86.Build.0 = Demo|Win32
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Light|x64.ActiveCfg = Light|x64
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Light|x64.Build.0 = Light|x64
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Light|x86.ActiveCfg = Light|Win32
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Light|x86.Build.0 = Light|Win32
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Log|x64.ActiveCfg = Debug|x64
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Log|x64.Build.0 = Debug|x64
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Log|x86.ActiveCfg = Debug|Win32
+		{1A7F35BA-0D83-4078-B403-0F5174F22EFF}.Log|x86.Build.0 = Debug|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

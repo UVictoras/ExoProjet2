@@ -115,5 +115,7 @@ std::vector<int> King::GetPossibleMoves()
         }
     }
 
+    m_possiblesMoves = moves;
+
     return moves;
 }

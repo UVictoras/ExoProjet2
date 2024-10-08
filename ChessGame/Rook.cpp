@@ -59,6 +59,7 @@ std::vector<int> Rook::GetPossibleMoves()
 {
     std::vector<int> moves;
     AddStraightLineMoves(moves);
+    m_possiblesMoves = moves;
     return moves;
 }
 
